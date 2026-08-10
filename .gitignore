@@ -1,0 +1,48 @@
+# === OS ===
+.DS_Store
+**/.DS_Store
+Thumbs.db
+**/Thumbs.db
+
+# === Frontend (React / TypeScript) ===
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+frontend/coverage/
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# === Backend (Django / Python) ===
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/venv/
+backend/env/
+backend/.venv/
+backend/db.sqlite3
+backend/staticfiles/
+backend/media/
+backend/.env
+backend/*.log
+
+# === GraphQL codegen ===
+frontend/src/generated/
+frontend/graphql.schema.json
+
+# === Editors / IDEs ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === Misc ===
+*.log
+.env
+.env.local
