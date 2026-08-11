@@ -1,3 +1,50 @@
-export type Person = { id:string; fullName:string; nickname:string; phoneNumber:string; emergencyContactName:string; emergencyContactPhone:string; emergencyContactRelationship:string; status:string; notes:string; timezone:string; availability:Record<string,string[]>; mode:string; address:Record<string,string>; gender:string; sameGenderPairingRequired:boolean; qualitativeAssessment:string; nationalBackground:string; ethnicBackground:string; religiousBackground:string; jobStudyCategory:string; currentProfession:string; hobbiesInterests:string; referenceCheckConducted:boolean; refereeName:string; refereeRelationship:string; refereeContact:string; pathwayToProgram:string; assessor:string; matcher:string; user:{email:string} }
-export type Student = {id:string; person:Person; englishLevel:string; linguisticBackground:string; intendedProfession:string; refugeeAsylumAssessment:string; interviewConducted:string}
-export type Tutor = {id:string; person:Person; otherLanguages:{language:string;level:string}[]; approvedToTutor:boolean; capacity:number; activePairingCount:number}
+export type Person = {
+  id: string;
+  fullName: string;
+  nickname: string;
+  phoneNumber: string;
+  emergencyContactName: string;
+  emergencyContactPhone: string;
+  emergencyContactRelationship: string;
+  applicationDate: string;
+  status: string;
+  notes: string;
+  timezone: string;
+  availability: Record<string, unknown>;
+  mode: string;
+  address: Record<string, string>;
+  gender: string;
+  sameGenderPairingRequired: boolean;
+  qualitativeAssessment: string;
+  nationalBackground: string;
+  ethnicBackground: string;
+  religiousBackground: string;
+  jobStudyCategory: string;
+  currentProfession: string;
+  hobbiesInterests: string;
+  referenceCheckConducted: boolean;
+  refereeName: string;
+  refereeRelationship: string;
+  refereeContact: string;
+  pathwayToProgram: string;
+  assessor: string;
+  matcher: string;
+  user: { email: string };
+};
+export type Student = {
+  id: string;
+  person: Person;
+  englishLevel: string;
+  linguisticBackground: string;
+  intendedProfession: string;
+  refugeeAsylumAssessment: string;
+  interviewConducted: string;
+};
+export type Tutor = {
+  id: string;
+  person: Person;
+  otherLanguages: { language: string; level: string }[];
+  approvedToTutor: boolean;
+  capacity: number;
+  activePairingCount: number;
+};
