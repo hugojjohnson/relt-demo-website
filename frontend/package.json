@@ -3,10 +3,12 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "homepage": "https://hugojjohnson.github.io/relt-demo-website",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
@@ -24,6 +26,7 @@
     "@types/react-dom": "latest",
     "eslint": "latest",
     "eslint-plugin-react-hooks": "latest",
-    "eslint-plugin-react-refresh": "latest"
+    "eslint-plugin-react-refresh": "latest",
+    "gh-pages": "^6.3.0"
   }
 }
