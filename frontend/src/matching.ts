@@ -42,11 +42,14 @@ export function rankTutorsForStudent(
 
 function normaliseHours(value: unknown): string[] {
   if (Array.isArray(value)) return value.map(String);
-  if (typeof value === "string")
+  if (typeof value === "string") {
+    const parsed = parseJson(value);
+    if (parsed !== value) return normaliseHours(parsed);
     return value
       .split(",")
       .map((hour) => hour.trim())
       .filter(Boolean);
+  }
   if (value && typeof value === "object")
     return Object.entries(value as Record<string, unknown>)
       .filter(([, selected]) => Boolean(selected))
@@ -55,13 +58,34 @@ function normaliseHours(value: unknown): string[] {
 }
 
 function commonHours(
-  a: Record<string, unknown> = {},
-  b: Record<string, unknown> = {},
+  a: unknown = {},
+  b: unknown = {},
 ) {
-  return Object.entries(a).flatMap(([day, hours]) => {
-    const tutorHours = normaliseHours(b[day]);
+  const studentAvailability = availabilityRecord(a);
+  const tutorAvailability = availabilityRecord(b);
+  return Object.entries(studentAvailability).flatMap(([day, hours]) => {
+    const tutorHours = normaliseHours(tutorAvailability[day]);
     return normaliseHours(hours)
       .filter((hour) => tutorHours.includes(hour))
       .map((hour) => `${day.slice(0, 3)} ${hour}`);
   });
+}
+
+/** Imported records may contain JSON text instead of a decoded JSON object. */
+function availabilityRecord(value: unknown): Record<string, unknown> {
+  if (typeof value === "string") {
+    const parsed = parseJson(value);
+    return parsed === value ? {} : availabilityRecord(parsed);
+  }
+  if (value && typeof value === "object" && !Array.isArray(value))
+    return value as Record<string, unknown>;
+  return {};
+}
+
+function parseJson(value: string): unknown {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
 }
