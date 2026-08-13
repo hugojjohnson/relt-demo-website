@@ -335,7 +335,7 @@ td a {
   border-color: rgb(234, 159, 119);
 }
 .student-list small,
-.tutor-option small {
+.tutor-option small:not(.tutor-profession) {
   display: block;
   margin-top: 4px;
   color: #805542;
@@ -343,6 +343,109 @@ td a {
 }
 .selected small {
   color: #333;
+}
+.tutor-option {
+  padding: 16px;
+  display: grid;
+  gap: 13px;
+}
+.tutor-option-header,
+.tutor-identity,
+.tutor-details,
+.shared-availability,
+.availability-groups {
+  display: flex;
+  align-items: center;
+}
+.tutor-option-header {
+  justify-content: space-between;
+  gap: 16px;
+}
+.tutor-identity {
+  min-width: 0;
+  gap: 10px;
+}
+.tutor-identity > span:last-child {
+  min-width: 0;
+}
+.tutor-identity strong {
+  display: block;
+}
+.tutor-avatar {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #f6d8ca;
+  color: #9c4927;
+  font-size: 12px;
+  font-weight: 700;
+}
+.tutor-profession {
+  display: block;
+  margin-top: 2px;
+  color: #805542;
+  font-size: 12px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.capacity-pill,
+.tutor-details span,
+.availability-chip {
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.capacity-pill {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  background: #f6d8ca;
+  color: #804024;
+}
+.tutor-details {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tutor-details span {
+  padding: 4px 8px;
+  background: #fff;
+  border: 1px solid #f1d8cb;
+  color: #68473a;
+}
+.shared-availability {
+  align-items: flex-start;
+  gap: 8px;
+}
+.availability-label {
+  flex: 0 0 auto;
+  color: #805542;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 25px;
+}
+.availability-groups {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.availability-chip {
+  padding: 5px 8px;
+  background: #fff;
+  color: #68473a;
+}
+.availability-chip b {
+  color: #9c4927;
+}
+.tutor-option.selected .tutor-avatar,
+.tutor-option.selected .capacity-pill {
+  background: #fff4ef;
+}
+.tutor-option.selected .tutor-details span,
+.tutor-option.selected .availability-chip {
+  border-color: rgba(255, 255, 255, 0.7);
 }
 .create-pairing {
   margin-top: 18px;

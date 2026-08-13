@@ -576,12 +576,40 @@ function Pairings() {
                   "tutor-option " + (tutor.id === tutorId ? "selected" : "")
                 }
                 onClick={() => setTutorId(tutor.id)}
+                aria-pressed={tutor.id === tutorId}
               >
-                <strong>{tutor.person.fullName}</strong>
-                <small>
-                  {tutor.capacity - tutor.activePairingCount} place(s) remaining
-                  · common time: {sharedHours.join(", ")}
-                </small>
+                <span className="tutor-option-header">
+                  <span className="tutor-identity">
+                    <span className="tutor-avatar" aria-hidden="true">
+                      {initials(tutor.person.fullName)}
+                    </span>
+                    <span>
+                      <strong>{tutor.person.fullName}</strong>
+                      {tutor.person.currentProfession && (
+                        <small className="tutor-profession">
+                          {tutor.person.currentProfession}
+                        </small>
+                      )}
+                    </span>
+                  </span>
+                  <span className="capacity-pill">
+                    {remainingPlaces(tutor)}
+                  </span>
+                </span>
+                <span className="tutor-details">
+                  <span>{formatDeliveryMode(tutor.person.mode)}</span>
+                  {languageSummary(tutor) && <span>{languageSummary(tutor)}</span>}
+                </span>
+                <span className="shared-availability">
+                  <span className="availability-label">Shared availability</span>
+                  <span className="availability-groups">
+                    {groupSharedHours(sharedHours).map(({ day, times }) => (
+                      <span className="availability-chip" key={day}>
+                        <b>{day}</b> {times.join(", ")}
+                      </span>
+                    ))}
+                  </span>
+                </span>
               </button>
             ))
           )}
@@ -623,6 +651,61 @@ function Pairings() {
       </section>
     </div>
   );
+}
+
+function initials(name: string) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase() || "?";
+}
+
+function remainingPlaces(tutor: Tutor) {
+  const places = Math.max(0, tutor.capacity - tutor.activePairingCount);
+  return `${places} ${places === 1 ? "spot" : "spots"} open`;
+}
+
+function formatDeliveryMode(mode: string) {
+  return mode
+    .replaceAll("_", " ")
+    .toLowerCase()
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function languageSummary(tutor: Tutor) {
+  const languages = Array.isArray(tutor.otherLanguages)
+    ? tutor.otherLanguages
+        .map((language) => language?.language)
+        .filter(Boolean)
+    : [];
+  if (!languages.length) return "";
+  return languages.length === 1
+    ? `Also speaks ${languages[0]}`
+    : `Also speaks ${languages.slice(0, 2).join(" & ")}${languages.length > 2 ? " +" : ""}`;
+}
+
+function groupSharedHours(sharedHours: string[]) {
+  const groups = new Map<string, string[]>();
+  sharedHours.forEach((slot) => {
+    const [day, ...time] = slot.split(" ");
+    if (!day || !time.length) return;
+    groups.set(day, [...(groups.get(day) || []), formatTime(time.join(" "))]);
+  });
+  return [...groups].map(([day, times]) => ({ day, times }));
+}
+
+function formatTime(time: string) {
+  const match = time.trim().match(/^(\d{1,2}):(\d{2})$/);
+  if (!match) return time;
+  const [, hour, minute] = match;
+  const date = new Date(2000, 0, 1, Number(hour), Number(minute));
+  return new Intl.DateTimeFormat("en-AU", {
+    hour: "numeric",
+    minute: Number(minute) ? "2-digit" : undefined,
+  }).format(date);
 }
 
 function Profile({

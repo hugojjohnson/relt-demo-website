@@ -3,12 +3,10 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "homepage": "https://hugojjohnson.github.io/relt-demo-website",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "deploy": "gh-pages -d dist"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
@@ -22,11 +20,11 @@
     "xlsx-populate": "^1.21.0"
   },
   "devDependencies": {
+    "@types/node": "^26.2.0",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "eslint": "latest",
     "eslint-plugin-react-hooks": "latest",
-    "eslint-plugin-react-refresh": "latest",
-    "gh-pages": "^6.3.0"
+    "eslint-plugin-react-refresh": "latest"
   }
 }
