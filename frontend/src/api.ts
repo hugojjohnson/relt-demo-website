@@ -7,4 +7,5 @@ export async function gql<T>(query: string, variables?: Record<string, unknown>)
   const json = await response.json()
   if (json.errors) throw new Error(json.errors.map((x:{message:string})=>x.message).join('\n'))
   return json.data
+
 }
