@@ -208,6 +208,7 @@ textarea {
 .directory-controls select { min-width: 0; }
 .table-scroll { overflow-x: auto; }
 .table-scroll table { min-width: 980px; }
+.pairing-table table { min-width: 560px; }
 .empty-state { color: #805542; margin: 18px 0 0; }
 .admin-export { max-width: 700px; }
 .admin-export p { color: #624c42; line-height: 1.55; max-width: 620px; }
@@ -493,5 +494,90 @@ td a {
   }
   .page-heading h1 {
     font-size: 35px;
+  }
+}
+
+@media (max-width: 600px) {
+  .shell aside {
+    padding: 14px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .brand {
+    flex: 1;
+    padding: 0;
+  }
+  .brand img {
+    width: 145px;
+  }
+  .shell nav {
+    order: 3;
+    width: 100%;
+    margin: 0;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .shell nav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .account {
+    margin: 0;
+  }
+  .account button {
+    width: auto;
+    margin: 0;
+  }
+  .page {
+    padding: 24px 14px;
+  }
+  .page section {
+    padding: 18px;
+  }
+  .page-heading {
+    margin-bottom: 22px;
+    gap: 14px;
+    flex-direction: column;
+  }
+  .page-heading h1 {
+    font-size: 32px;
+  }
+  h2 {
+    font-size: 22px;
+  }
+  .table-title {
+    gap: 14px;
+  }
+  .admin-export button,
+  .page-heading .button {
+    justify-content: center;
+  }
+  .tutor-option-header {
+    align-items: flex-start;
+  }
+  .shared-availability {
+    display: grid;
+    gap: 5px;
+  }
+  .availability-label {
+    line-height: normal;
+  }
+}
+
+@media (max-width: 380px) {
+  .page section {
+    padding: 15px;
+  }
+  .tutor-option {
+    padding: 14px;
+  }
+  .tutor-option-header {
+    gap: 10px;
+  }
+  .capacity-pill {
+    font-size: 11px;
+  }
+  .table-title h2 {
+    white-space: normal;
   }
 }

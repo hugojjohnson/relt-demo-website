@@ -626,28 +626,30 @@ function Pairings() {
         <h2>
           Existing pairings <span>{data.pairings.length}</span>
         </h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Tutor</th>
-              <th>Student</th>
-              <th>Start date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.pairings.map((p) => (
-              <tr key={p.id}>
-                <td>{p.tutor.person.fullName}</td>
-                <td>{p.student.person.fullName}</td>
-                <td>{p.startDate}</td>
-                <td>
-                  <Status value={p.status} />
-                </td>
+        <div className="table-scroll pairing-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Tutor</th>
+                <th>Student</th>
+                <th>Start date</th>
+                <th>Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.pairings.map((p) => (
+                <tr key={p.id}>
+                  <td>{p.tutor.person.fullName}</td>
+                  <td>{p.student.person.fullName}</td>
+                  <td>{p.startDate}</td>
+                  <td>
+                    <Status value={p.status} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );
