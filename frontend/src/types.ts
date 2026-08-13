@@ -33,6 +33,7 @@ export type Person = {
 };
 export type Student = {
   id: string;
+  activePairingCount: number;
   person: Person;
   englishLevel: string;
   linguisticBackground: string;
@@ -45,6 +46,7 @@ export type Tutor = {
   person: Person;
   otherLanguages: { language: string; level: string }[];
   approvedToTutor: boolean;
+  wwccProvided: boolean;
   capacity: number;
   activePairingCount: number;
 };

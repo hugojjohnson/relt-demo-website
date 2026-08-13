@@ -140,6 +140,7 @@ class TutorProfile(models.Model):
         default=list, blank=True, help_text='[{"language":"Arabic","level":"B2"}]'
     )
     approved_to_tutor = models.BooleanField(default=False)
+    wwcc_provided = models.BooleanField(default=False)
     capacity = models.PositiveSmallIntegerField(default=1)
 
 

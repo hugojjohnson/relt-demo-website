@@ -13,29 +13,23 @@ import {
   Users,
   Link2,
   UserRound,
-  Plus,
   ArrowLeft,
 } from "lucide-react";
 import logo from "../public/logo.png";
 import { gql } from "./api";
 import type { Person, Student, Tutor } from "./types";
-import {
-  choices,
-  Field,
-  Picker,
-  Section,
-  TextArea,
-  Toggle,
-} from "./components";
+import { choices, Field, Picker, Section, TextArea, Toggle } from "./ui/forms";
+import { Status } from "./ui/Status";
+import { Directory } from "./admin/Directory";
+import { AdminPage } from "./admin/AdminPage";
 import { rankTutorsForStudent } from "./matching";
 
 type Me = { id: string; email: string; role: string };
 type Kind = "students" | "tutors";
 const ME = `query { me { id email role } }`;
 const PERSON_FIELDS = `id fullName nickname phoneNumber emergencyContactName emergencyContactPhone emergencyContactRelationship applicationDate status notes timezone availability mode address gender sameGenderPairingRequired qualitativeAssessment nationalBackground ethnicBackground religiousBackground jobStudyCategory currentProfession hobbiesInterests referenceCheckConducted refereeName refereeRelationship refereeContact pathwayToProgram assessor matcher user { email }`;
-const STUDENT_FIELDS = `id englishLevel linguisticBackground intendedProfession refugeeAsylumAssessment interviewConducted person { ${PERSON_FIELDS} }`;
-const TUTOR_FIELDS = `id otherLanguages approvedToTutor capacity activePairingCount person { ${PERSON_FIELDS} }`;
-const DIRECTORY = `query { students { ${STUDENT_FIELDS} } tutors { ${TUTOR_FIELDS} } }`;
+const STUDENT_FIELDS = `id activePairingCount englishLevel linguisticBackground intendedProfession refugeeAsylumAssessment interviewConducted person { ${PERSON_FIELDS} }`;
+const TUTOR_FIELDS = `id otherLanguages approvedToTutor wwccProvided capacity activePairingCount person { ${PERSON_FIELDS} }`;
 const emptyPerson: Person = {
   id: "",
   fullName: "",
@@ -118,86 +112,6 @@ function Login({ done }: { done: (u: Me) => void }) {
       </form>
     </main>
   );
-}
-
-function Directory({ kind }: { kind: Kind }) {
-  const [data, setData] = useState<{
-    students: Student[];
-    tutors: Tutor[];
-  } | null>(null);
-  useEffect(() => {
-    gql<{ students: Student[]; tutors: Tutor[] }>(DIRECTORY).then(setData);
-  }, []);
-  const rows = kind === "students" ? data?.students : data?.tutors;
-  const label = kind === "students" ? "Students" : "Tutors";
-  if (!data) return <div className="page">Loading {label.toLowerCase()}…</div>;
-  return (
-    <div className="page">
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">Administration</p>
-          <h1>{label}</h1>
-        </div>
-        <NavLink className="button" to={`/${kind}/add`}>
-          <Plus size={16} /> Add {kind.slice(0, -1)}
-        </NavLink>
-      </div>
-      <section className="table-card">
-        <h2>
-          {label}
-          <span>{rows?.length}</span>
-        </h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Status</th>
-              <th>{kind === "students" ? "Assessment" : "Capacity"}</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {kind === "students"
-              ? (rows as Student[]).map((s) => (
-                  <tr key={s.id}>
-                    <td>
-                      <strong>{s.person.fullName}</strong>
-                      <small>{s.person.user.email}</small>
-                    </td>
-                    <td>
-                      <Status value={s.person.status} />
-                    </td>
-                    <td>{s.person.qualitativeAssessment || "Not assessed"}</td>
-                    <td>
-                      <NavLink to={`/students/${s.id}/edit`}>Edit</NavLink>
-                    </td>
-                  </tr>
-                ))
-              : (rows as Tutor[]).map((t) => (
-                  <tr key={t.id}>
-                    <td>
-                      <strong>{t.person.fullName}</strong>
-                      <small>{t.person.user.email}</small>
-                    </td>
-                    <td>
-                      <Status value={t.person.status} />
-                    </td>
-                    <td>
-                      {t.activePairingCount}/{t.capacity} places used
-                    </td>
-                    <td>
-                      <NavLink to={`/tutors/${t.id}/edit`}>Edit</NavLink>
-                    </td>
-                  </tr>
-                ))}
-          </tbody>
-        </table>
-      </section>
-    </div>
-  );
-}
-function Status({ value }: { value: string }) {
-  return <i className={"status " + value.toLowerCase()}>{value}</i>;
 }
 
 function PersonFields({
@@ -400,7 +314,7 @@ function PersonEditor({
           refugeeAsylumAssessment: "",
           interviewConducted: "PENDING",
         }
-      : { otherLanguages: [], approvedToTutor: false, capacity: 1 },
+      : { otherLanguages: [], approvedToTutor: false, wwccProvided: false, capacity: 1 },
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -531,6 +445,11 @@ function PersonEditor({
               label="Approved to tutor"
               checked={!!profile.approvedToTutor}
               onChange={(v) => setProfile({ ...profile, approvedToTutor: v })}
+            />
+            <Toggle
+              label="WWCC provided"
+              checked={!!profile.wwccProvided}
+              onChange={(v) => setProfile({ ...profile, wwccProvided: v })}
             />
             <TextArea
               label="Other languages — JSON list"
@@ -773,6 +692,9 @@ function App() {
               <NavLink to="/pairings">
                 <Link2 /> Pairings
               </NavLink>
+              <NavLink to="/admin">
+                <BookOpen /> Admin
+              </NavLink>
             </>
           ) : (
             <NavLink to="/profile">
@@ -809,6 +731,7 @@ function App() {
               element={<PersonEditor kind="tutors" />}
             />
             <Route path="/pairings" element={<Pairings />} />
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="*" element={<Navigate to="/students" replace />} />
           </Routes>
         ) : (

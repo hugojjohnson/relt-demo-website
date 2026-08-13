@@ -190,6 +190,27 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
+.table-title {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 21px;
+}
+.table-title h2 { margin: 0 !important; white-space: nowrap; }
+.directory-controls {
+  display: grid;
+  grid-template-columns: minmax(190px, 1.6fr) repeat(3, minmax(135px, 1fr));
+  gap: 9px;
+  width: min(100%, 760px);
+}
+.directory-controls input,
+.directory-controls select { min-width: 0; }
+.table-scroll { overflow-x: auto; }
+.table-scroll table { min-width: 980px; }
+.empty-state { color: #805542; margin: 18px 0 0; }
+.admin-export { max-width: 700px; }
+.admin-export p { color: #624c42; line-height: 1.55; max-width: 620px; }
 .table-card h2 span,
 .student-list h2 span {
   font: 600 13px "DM Sans";
@@ -359,6 +380,8 @@ td a {
   .matching-board {
     grid-template-columns: 1fr;
   }
+  .table-title { display: grid; }
+  .directory-controls { width: 100%; grid-template-columns: 1fr; }
   .wide {
     grid-column: auto;
   }

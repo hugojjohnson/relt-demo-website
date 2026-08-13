@@ -19,9 +19,14 @@ class PersonType(DjangoObjectType):
 
 
 class StudentType(DjangoObjectType):
+    active_pairing_count = graphene.Int()
+
     class Meta:
         model = StudentProfile
         fields = "__all__"
+
+    def resolve_active_pairing_count(root, info):
+        return root.pairings.filter(status=Pairing.Status.ACTIVE).count()
 
 
 class TutorType(DjangoObjectType):

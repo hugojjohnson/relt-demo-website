@@ -15,7 +15,9 @@
     "react-dom": "latest",
     "react-router-dom": "^7.18.2",
     "typescript": "latest",
-    "vite": "latest"
+    "vite": "latest",
+    "xlsx-js-style": "^1.2.0",
+    "xlsx-populate": "^1.21.0"
   },
   "devDependencies": {
     "@types/react": "latest",
