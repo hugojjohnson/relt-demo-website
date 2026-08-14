@@ -16,7 +16,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import logo from "../public/logo.png";
-import { gql } from "./api";
+import { gql, refreshCsrf } from "./api";
 import type { Person, Student, Tutor } from "./types";
 import { choices, Field, Picker, Section, TextArea, Toggle } from "./ui/forms";
 import { Status } from "./ui/Status";
@@ -82,9 +82,12 @@ function Login({ done }: { done: (u: Me) => void }) {
         `mutation($email:String!,$password:String!){login(email:$email,password:$password){ok error user{id email role}}}`,
         { email, password },
       );
-      r.login.ok
-        ? done(r.login.user)
-        : setError(r.login.error || "Unable to sign in");
+      if (r.login.ok) {
+        refreshCsrf();
+        done(r.login.user);
+      } else {
+        setError(r.login.error || "Unable to sign in");
+      }
     } catch (e) {
       setError(String(e));
     }
@@ -544,17 +547,41 @@ function Pairings() {
           {students.map((s) => (
             <button
               key={s.id}
-              className={s.id === studentId ? "selected" : ""}
+              className={
+                "student-option " + (s.id === studentId ? "selected" : "")
+              }
               onClick={() => {
                 setStudentId(s.id);
                 setTutorId("");
               }}
             >
-              <strong>{s.person.fullName}</strong>
-              <small>
-                {s.person.qualitativeAssessment || "Not assessed"} · applied{" "}
-                {new Date(s.person.applicationDate).toLocaleDateString()}
-              </small>
+              <span className="tutor-option-header">
+                <span className="tutor-identity">
+                  <span className="tutor-avatar" aria-hidden="true">
+                    {initials(s.person.fullName)}
+                  </span>
+                  <span>
+                    <strong>{s.person.fullName}</strong>
+                    {s.person.currentProfession && (
+                      <small className="tutor-profession">
+                        {s.person.currentProfession}
+                      </small>
+                    )}
+                  </span>
+                </span>
+              </span>
+              <span className="tutor-details">
+                <span>
+                  Country: {s.person.nationalBackground || "not recorded"}
+                </span>
+                <span>
+                  Native language: {s.linguisticBackground || "not recorded"}
+                </span>
+                <span>
+                  Assessment: {s.person.qualitativeAssessment || "not assessed"}
+                </span>
+                <span>Applied {formatApplicationDate(s.person.applicationDate)}</span>
+              </span>
             </button>
           ))}
         </section>
@@ -592,12 +619,19 @@ function Pairings() {
                       )}
                     </span>
                   </span>
-                  <span className="capacity-pill">
-                    {remainingPlaces(tutor)}
+                  <span className="tutor-option-actions">
+                    <span className="delivery-pill">
+                      Applied {formatApplicationDate(tutor.person.applicationDate)}
+                    </span>
+                    <span className="delivery-pill">
+                      {formatDeliveryMode(tutor.person.mode)}
+                    </span>
+                    <span className="capacity-pill">
+                      {remainingPlaces(tutor)}
+                    </span>
                   </span>
                 </span>
                 <span className="tutor-details">
-                  <span>{formatDeliveryMode(tutor.person.mode)}</span>
                   {languageSummary(tutor) && <span>{languageSummary(tutor)}</span>}
                 </span>
                 <span className="shared-availability">
@@ -675,6 +709,10 @@ function formatDeliveryMode(mode: string) {
     .replaceAll("_", " ")
     .toLowerCase()
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function formatApplicationDate(value: string) {
+  return value ? new Date(value).toLocaleDateString("en-AU") : "date not recorded";
 }
 
 function languageSummary(tutor: Tutor) {
